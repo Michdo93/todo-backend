@@ -22,8 +22,8 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 Tage
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./todo.db")
 
-if os.getenv("RENDER") and DATABASE_URL.startswith("sqlite"):
-    os.makedirs("/data", exist_ok=True)
+# Render.com: /data nur nutzen wenn Disk bereits gemountet ist (existiert + beschreibbar)
+if DATABASE_URL.startswith("sqlite") and os.path.isdir("/data") and os.access("/data", os.W_OK):
     DATABASE_URL = "sqlite:////data/todo.db"
 
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "*").split(",")
